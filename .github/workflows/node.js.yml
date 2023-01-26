@@ -30,12 +30,13 @@ jobs:
     - run: node node_modules/mocha/bin/mocha --recursive t/unit
 
     - name: Build docker image
-      run: echo ${KEY} > key.json
-      run: gcloud auth activate-service-account ${ACCOUNT} --key-file=key.json
-      run: export IMAGE="us.gcr.io/${PROJECT_ID}/${REPOSITORY}"
-      run: export NEW_VERSION=$(jq -r '.version' < package.json)
-      run: export EXISTENCE=$(gcloud container images list-tags $IMAGE --filter="tags:$NEW_VERSION")
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.KEY }}'
       run: |
+        export IMAGE="us.gcr.io/${PROJECT_ID}/${REPOSITORY}"
+        export NEW_VERSION=$(jq -r '.version' < package.json)
+        export EXISTENCE=$(gcloud container images list-tags $IMAGE --filter="tags:$NEW_VERSION")
         if [[ $EXISTENCE != "" ]]; then
           echo "Error: This image version is already stored in the registry"
         else 
