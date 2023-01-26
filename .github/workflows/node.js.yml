@@ -20,36 +20,41 @@ jobs:
         working-directory: ./application
     steps:
     - uses: actions/checkout@v3
+
     - name: Use Node.js v19.4.0
       uses: actions/setup-node@v3
       with:
         node-version: 19.4.0
         cache: 'npm'
+
     - run: npm install
+    
     - run: npm run build --if-present
+
     - run: node node_modules/mocha/bin/mocha --recursive t/unit
 
   build-docker:
+
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./application
+
     steps:
     - uses: actions/checkout@v3
-    - name: gcloud auth
-      uses: 'google-github-actions/auth@v1'
-      with:
-        credentials_json: '${{ secrets.KEY }}'
-    - name: Set Up Cloud SDK
-      uses: 'google-github-actions/setup-gcloud@v1'
-    - name: Build Docker image
+
+    - name: Docker image
       run: |
+        echo '${{ secrets.KEY }}' > key.json
+        gcloud auth activate-service-account ci-cd-service-account@gorilla-time-management-app.iam.gserviceaccount.com --key-file=key.json --project=gorilla-time-management-app
+        gcloud auth configure-docker
         export IMAGE="us.gcr.io/gorilla-time-management-app/time-management-app"
         export NEW_VERSION=$(jq -r '.version' < package.json)
         export EXISTENCE=$(gcloud container images list-tags $IMAGE --filter="tags:$NEW_VERSION")
         if [[ $EXISTENCE != "" ]]; then
-          echo "Error: This image version is already stored in the registry"
+          echo "::error This image version is already stored in the registry"
+          exit 1
         else 
           docker build -t $IMAGE:$NEW_VERSION .
-          docker push $IMAGE
+          docker push $IMAGE:$NEW_VERSION
         fi
