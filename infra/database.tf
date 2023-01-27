@@ -1,5 +1,5 @@
 resource "google_sql_database_instance" "sql_primary_instance" {
-  region           = var.region
+  region           = "us-east1"
   database_version = "MYSQL_8_0"
   settings {
     tier              = "db-g1-small"
@@ -13,7 +13,7 @@ resource "google_sql_database_instance" "sql_primary_instance" {
 }
 
 resource "google_sql_database_instance" "sql_secondary_instance" {
-  region               = var.region
+  region               = "us-east1"
   database_version     = "MYSQL_8_0"
   master_instance_name = google_sql_database_instance.sql_primary_instance.name
   settings {
@@ -33,7 +33,7 @@ resource "google_sql_database" "gorilla_mysql_database" {
 }
 
 resource "google_sql_user" "database_user" {
-  name     = var.db_username
+  name     = "toma_user"
   instance = google_sql_database_instance.sql_primary_instance.name
-  password = var.db_user_pass
+  password = "xhWsDeF2z1OO"
 }
