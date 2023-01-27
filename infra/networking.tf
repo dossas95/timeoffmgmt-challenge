@@ -18,19 +18,19 @@ resource "google_compute_subnetwork" "private_subnet" {
 }
 
 module "gce-lb-http" {
-  source  = "GoogleCloudPlatform/lb-http/google"
-  version = "~> 6.0"
-  name    = "http-lb"
-  project = "gorilla-time-management-app"
-  firewall_networks = [google_compute_network.vpc_network.name]
-  ssl = true
-  use_ssl_certificates = false
+  source                          = "GoogleCloudPlatform/lb-http/google"
+  version                         = "~> 6.0"
+  name                            = "http-lb"
+  project                         = "gorilla-time-management-app"
+  firewall_networks               = [google_compute_network.vpc_network.name]
+  ssl                             = true
+  use_ssl_certificates            = false
   managed_ssl_certificate_domains = ["davidossas.com"]
-  create_address = false
-  address = "35.211.66.181"
+  create_address                  = false
+  address                         = "35.211.66.181"
 
   backends = {
-    default = {# 
+    default = { # 
       description                     = null
       protocol                        = "HTTP"
       port                            = 80

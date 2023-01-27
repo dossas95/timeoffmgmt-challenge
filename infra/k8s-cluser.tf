@@ -1,6 +1,6 @@
 resource "google_container_cluster" "kubernetes_cluster" {
-  name     = "kubernetes-cluster"
-  location = "us-east1"
+  name                     = "kubernetes-cluster"
+  location                 = "us-east1"
   remove_default_node_pool = true
   initial_node_count       = 1
 }
@@ -21,7 +21,7 @@ resource "google_container_node_pool" "cluster_node_pool" {
     machine_type = "e2-medium"
 
     service_account = google_service_account.kubernetes_node_sa.email
-    oauth_scopes    = [
+    oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
