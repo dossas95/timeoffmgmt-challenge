@@ -1,6 +1,6 @@
 terraform {
- backend "gcs" {
-   bucket  = "tfstate-gorilla-challenge"
-   prefix  = "terraform/state"
- }
+  backend "gcs" {
+    bucket = "tfstate-gorilla-challenge"
+    prefix = "terraform/state"
+  }
 }

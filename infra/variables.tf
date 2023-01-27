@@ -4,9 +4,9 @@ variable "region" {
 }
 
 variable "db_username" {
-    description = "Name of the user with access to the database"
+  description = "Name of the user with access to the database"
 }
 
 variable "db_user_pass" {
-    description = "Password for the database user"
+  description = "Password for the database user"
 }

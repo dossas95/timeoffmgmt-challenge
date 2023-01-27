@@ -36,7 +36,11 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Terraform Init
-      run: terraform init
+      run: |
+        echo '${{ secrets.KEY }}' > key.json
+        export GOOGLE_APPLICATION_CREDENTIALS=key.json
+        gcloud auth activate-service-account ci-cd-service-account@gorilla-time-management-app.iam.gserviceaccount.com --key-file=key.json --project=gorilla-time-management-app
+        terraform init
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
