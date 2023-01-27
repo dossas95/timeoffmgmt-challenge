@@ -30,7 +30,7 @@ module "gce-lb-http" {
   address                         = "35.211.66.181"
 
   backends = {
-    default = { # 
+    default = {
       description                     = null
       protocol                        = "HTTP"
       port                            = 80
