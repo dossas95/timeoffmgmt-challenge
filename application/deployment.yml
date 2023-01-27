@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: time-management-deployment
+  labels:
+    app: time-management
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: time-management
+  template:
+    metadata:
+      labels:
+        app: time-management
+    spec:
+      containers:
+      - name: time-management-app
+        image: us.gcr.io/gorilla-time-management-app/time-management-app:latest
+        ports:
+        - containerPort: 3000
